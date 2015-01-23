@@ -1,0 +1,21 @@
+var express = require('express');
+var jf = require('jsonfile');
+var path = require('path');
+var router = express.Router();
+var fs = require("fs");
+
+router.get('/:id', function (req, res, next) {
+    var page = { title: 'VSPOC', page: 'Investment page' };
+    var id = req.params.id;
+    if (id=="fb") {
+        var file = JSON.parse(fs.readFileSync("./data/invGraph-fb.json", "utf8"));
+        res.send(file);
+    } else {
+        var file = JSON.parse(fs.readFileSync("./data/invGraph-goog.json", "utf8"));
+        res.send(file);
+    }
+
+    
+});
+
+module.exports = router;
