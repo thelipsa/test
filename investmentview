@@ -1,0 +1,160 @@
+
+define('vsBB/View/InvestmentView', ['backbone', 'jquery', 'custom', 'bootstrap', 'vsBB/Model/InvestmentChartModel'
+],
+
+
+function (Backbone, $, custom, bootstrap, InvestmentChartModel) {
+
+
+var DataModel = Backbone.Model.extend({});
+
+var DataCollection = Backbone.Collection.extend({
+    model: DataModel
+});
+var companyname = new Array();
+var sharevalue = new Array();
+
+var DataView = Backbone.View.extend({
+    el: '#chartcontainer',
+    initialize: function (options) {
+        this.data = options.data;
+        
+    },
+    render: function (items,code) {
+        this.$el.highcharts({
+            chart: {
+                type: "column"
+            },
+            title: {
+                text: 'Investment By Company'
+            },
+            xAxis: {
+                categories: []
+            },
+            labels: {
+                items: [{
+
+                    style: {
+                        left: '50px',
+                        top: '18px',
+                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                    }
+                }]
+            },
+            plotOptions: {
+                series: {
+                    dataLabels: {
+                        enabled: true,
+                        color: 'red'
+                    }
+                }
+            },
+             series: this.data.toJSON()
+        });
+    }
+
+
+});
+
+var items = new DataCollection([{
+
+    data: []
+}]);
+
+
+$(function () {
+    companyname.length = 0;
+    sharevalue.length = 0;
+    jQuery.ajax({
+
+        type: "GET",
+        contentType: "application/json",
+        url: "api/investment/fb",
+        dataType: 'json',
+        success: function (data) {
+            object = data;
+            PopulateChart(object);
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            alert(xhr.status);
+            alert(errorThrown);
+            alert(xhr.responseText);
+        }
+
+    });
+    $('.usa-map').css('display', 'table');
+    $('.europemap').css('display', 'none');
+
+});
+
+
+$('#fb').click(function () {
+    companyname.length = 0;
+    sharevalue.length = 0;
+    jQuery.ajax({
+
+        type: "GET",
+        contentType: "application/json",
+        url: "api/investment/fb",
+        dataType: 'json',
+        success: function (data) {
+            object = data;
+            PopulateChart(object);
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            alert(xhr.status);
+            alert(errorThrown);
+            alert(xhr.responseText);
+        }
+
+    });
+    $('.usa-map').css('display', 'table');
+    $('.europemap').css('display', 'none');
+});
+
+$('#goo').click(function () {
+    companyname.length = 0;
+    sharevalue.length = 0;
+
+    jQuery.ajax({
+
+        type: "GET",
+        contentType: "application/json",
+        url: "api/investment/goo",
+        dataType: 'json',
+        success: function (data) {
+            object = data;
+            PopulateChart(object);
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            alert(xhr.status);
+            alert(errorThrown);
+            alert(xhr.responseText);
+        }
+
+    });
+    $('.usa-map').css('display', 'none');
+    $('.europemap').css('display', 'table');
+
+    });
+
+function PopulateChart(object) {
+   
+    for (var i = 0; i < object.companyDetails.rounds.length; i++) {
+        var value = object.companyDetails.rounds[i].sharePrice;
+        var code = object.companyDetails.rounds[i].type.code;
+        sharevalue.push(value);
+        companyname.push(code);
+    }
+    items.reset({ data: sharevalue });
+    var view = new DataView({ data: items });
+
+    view.render(items,code);
+}
+
+
+return InvestmentView;
+   });
+
+
+
