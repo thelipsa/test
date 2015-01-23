@@ -1,0 +1,45 @@
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="robots" content="noindex" />
+<meta name="googlebot" content="index" />
+<meta name="robots" content="nofollow" />
+<script src="js/lib/jquery.js"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script src="http://underscorejs.org/underscore-min.js"></script>
+<script src="http://backbonejs.org/backbone-min.js"></script>
+
+<link rel="stylesheet" href="css/bootstrap-theme.min.css" type="text/css">
+<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+<link rel="stylesheet" href="css/DowJones.css" type="text/css">
+<link rel="stylesheet" href="css/carousel.css" type="text/css">
+<link rel="stylesheet" href="css/toggle-switch.css" type="text/css">
+
+<div class="center-pane-blue-surround">
+    <div class="center-pane-header-area">
+        <div class="heading-text font-bold-heavyheader" style="display: inline">Investment Data</div>
+        <div class="switch-toggle well  toggle-pane" >
+            <input id="week" name="view" type="radio" checked>
+            <label id="fb" for="week" class="toggle-label" onclick="">Facebook</label>
+            <input id="month" name="view" type="radio">
+            <label id="goo" for="month" class="toggle-label" onclick="">google</label>
+            <a class="btn btn-primary toggle-btn"></a>
+        </div>
+    </div>
+    <div class="middle-white-area">
+        <div class="row mobile-full-pane">
+            <div class="col-sm-5">
+                <img class="europemap img-responsive center-block" src="images/landingPage/europe.jpg" alt="Map" width="271" />
+                <img class="usa-map img-responsive center-block" src="images/landingPage/Map_image.jpg" alt="Map" width="271" />
+            </div>
+            <div class="col-sm-7 no-padding">
+                <div id="chartcontainer">
+
+                </div>
+             </div>
+         </div>
+    </div>
+
+    </div>
+<script data-main="/js/vsBB/View/InvestmentView" src="/js/lib/require.js"></script>
