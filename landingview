@@ -1,0 +1,31 @@
+Enter file contents here/*global document setTimeout clearTimeout*/
+/*
+ * vsBBProfileView
+ */
+define('vsBB/View/LandingPageView', ['backbone', 'hogan', 'jquery','bootstrap','vsBB/View/SampleView'
+],
+    function (Backbone, Hogan, $, bootstrap, SampleView) {
+        var LandingPageView = Backbone.View.extend({
+
+            cfg: {
+                'invfbyregion': '.center-pane-blue-surround.invf',
+                'invID': '#chartcontainer'
+
+            },
+
+            initialize: function (options) {
+                console.log('initialize LandingPageView');
+
+                var view = new SampleView(this.cfg.invID);
+                view.loaddata();
+            },
+            events: function () {
+                var events = {};
+                //events['onclick ' + this.cfg.invfbyregion] = 'loadInvestByRegion';
+
+                return events;
+            }
+            
+        });
+        return LandingPageView;
+    });
