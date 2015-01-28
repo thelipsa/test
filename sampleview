@@ -1,0 +1,215 @@
+Enter file contents here//var DataModel = Backbone.Model.extend({});
+
+//var DataCollection = Backbone.Collection.extend({
+  //  model: DataModel
+//});
+var companyname = new Array();
+var sharevalue = new Array();
+var id = null;
+
+
+
+
+define('vsBB/View/SampleView', ['backbone','underscore' ,'jquery', 'bootstrap','highcharts','vsBB/Model/SampleModel'
+],
+
+
+function (Backbone,_, $ , bootstrap,highcharts,DataCollection) {
+
+var items = new DataCollection([{
+
+    data: []
+}]);
+
+var SampleView = Backbone.View.extend({
+   
+    initialize: function (invid) {
+        id = invid;
+        console.log(id);
+        console.log('(\"'+id+'"\)');
+    },
+   
+        el: ("#chartcontainer"),
+		render: function (sharevalue,code) {
+		     this.$el.highcharts({
+            //$(id).highcharts({
+
+            chart: {
+                type: "column"
+            },
+            title: {
+                text: 'Investment By Company'
+            },
+            xAxis: {
+                categories: []
+            },
+            labels: {
+                items: [{
+
+                    style: {
+                        left: '50px',
+                        top: '18px',
+                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                    }
+                }]
+            },
+            plotOptions: {
+                series: {
+                    dataLabels: {
+                        enabled: true,
+                        color: 'red'
+                    }
+                }
+            },
+			series: [{
+           
+            data: sharevalue
+        }]
+        });
+    },
+
+	loaddata:function(){
+	console.log("loaddata");
+    companyname.length = 0;
+    sharevalue.length = 0;
+    jQuery.ajax({
+
+        type: "GET",
+        contentType: "application/json",
+        url: "api/investment/fb",
+        dataType: 'json',
+        success: function (data) {
+            object = data;
+           PopulateChart(object);
+		   //testfunc();
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            alert(xhr.status);
+            alert(errorThrown);
+            alert(xhr.responseText);
+        }
+
+    });
+    $('.usa-map').css('display', 'table');
+    $('.europemap').css('display', 'none');
+
+	},
+	
+	events:{ 
+     'click #fb': 'FBData', 
+     'click #goo': 'GoogleData' 
+	},
+	FBData: function(){
+	 companyname.length = 0;
+    sharevalue.length = 0;
+    jQuery.ajax({
+
+        type: "GET",
+        contentType: "application/json",
+        url: "api/investment/fb",
+        dataType: 'json',
+        success: function (data) {
+            object = data;
+            PopulateChart(object);
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            alert(xhr.status);
+            alert(errorThrown);
+            alert(xhr.responseText);
+        }
+
+    });
+    $('.usa-map').css('display', 'table');
+    $('.europemap').css('display', 'none');
+	},
+	GoogleData: function(){
+	 companyname.length = 0;
+    sharevalue.length = 0;
+    jQuery.ajax({
+
+        type: "GET",
+        contentType: "application/json",
+        url: "api/investment/goo",
+        dataType: 'json',
+        success: function (data) {
+            object = data;
+            this.PopulateChart(object);
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            alert(xhr.status);
+            alert(errorThrown);
+            alert(xhr.responseText);
+        }
+
+    });
+    $('.usa-map').css('display', 'none');
+    $('.europemap').css('display', 'table');
+	}
+
+	});
+	
+	function PopulateChart(object){
+	console.log("populatechart");
+	 for (var i = 0; i < object.companyDetails.rounds.length; i++) {
+        var value = object.companyDetails.rounds[i].sharePrice;
+        var code = object.companyDetails.rounds[i].type.code;
+        sharevalue.push(value);
+        companyname.push(code);
+    }
+    items.reset({ data: sharevalue });
+	//SampleView.render(items,code);
+	//render(items,code);
+	var view=new SampleView(items);
+	view.render(sharevalue,code);
+	//this.render(items,code);
+	}
+	
+	$('#fb').click(function () {
+    companyname.length = 0;
+    sharevalue.length = 0;
+    jQuery.ajax({
+
+        type: "GET",
+        contentType: "application/json",
+        url: "api/investment/fb",
+        dataType: 'json',
+        success: function (data) {
+            object = data;
+            PopulateChart(object);
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            alert(xhr.status);
+            alert(errorThrown);
+            alert(xhr.responseText);
+        }
+
+    });
+    $('.usa-map').css('display', 'table');
+    $('.europemap').css('display', 'none');
+});
+$('#goo').click(function () {
+    companyname.length = 0;
+    sharevalue.length = 0;
+    jQuery.ajax({
+
+        type: "GET",
+        contentType: "application/json",
+        url: "api/investment/goo",
+        dataType: 'json',
+        success: function (data) {
+            object = data;
+            PopulateChart(object);
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            alert(xhr.status);
+            alert(errorThrown);
+            alert(xhr.responseText);
+        }
+
+    });
+    $('.usa-map').css('display', 'none');
+    $('.europemap').css('display', 'table');
+});
+	return SampleView;
+	});
+
