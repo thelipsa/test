@@ -1,0 +1,13 @@
+Enter file contents here/**
+ * vsBBSampleModel
+ */
+define('vsBB/Model/SampleModel', ['backbone', 'jquery'],
+
+  function (Backbone, $) {
+     var SampleModel = Backbone.Model.extend({});
+
+var DataCollection = Backbone.Collection.extend({
+    model: SampleModel
+});
+      return DataCollection;
+  });
